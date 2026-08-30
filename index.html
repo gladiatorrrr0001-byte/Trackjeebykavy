@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track-JEE — Master Prep Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <header class="app-header">
+            <h1 class="brand-title">TRACK<span>JEE</span></h1>
+            
+            <div class="countdown-card">
+                <div class="date-picker-row">
+                    <label for="target-date-input">SET TARGET EXAM DATE:</label>
+                    <input type="datetime-local" id="target-date-input">
+                </div>
+                <div id="exam-countdown" class="countdown-digits">00d 00h 00m 00s</div>
+            </div>
+        </header>
+
+        <section class="overview-section">
+            <div class="overall-progress-card">
+                <div class="progress-title-row">
+                    <span>Overall Syllabus Completed</span>
+                    <strong id="overall-progress-text">0%</strong>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="overall-progress-fill" class="progress-bar-fill overall-fill"></div>
+                </div>
+            </div>
+
+            <div class="subject-progress-grid">
+                <div class="subject-card physics-card">
+                    <div class="progress-title-row">
+                        <span>Physics</span>
+                        <strong id="physics-progress-text">0%</strong>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="physics-progress-fill" class="progress-bar-fill physics-fill"></div>
+                    </div>
+                </div>
+
+                <div class="subject-card chemistry-card">
+                    <div class="progress-title-row">
+                        <span>Chemistry</span>
+                        <strong id="chemistry-progress-text">0%</strong>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="chemistry-progress-fill" class="progress-bar-fill chemistry-fill"></div>
+                    </div>
+                </div>
+
+                <div class="subject-card maths-card">
+                    <div class="progress-title-row">
+                        <span>Mathematics</span>
+                        <strong id="maths-progress-text">0%</strong>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="maths-progress-fill" class="progress-bar-fill maths-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="task-manager-section">
+            <h2 class="section-heading">Daily Focus & Task Manager</h2>
+            <form id="task-form" class="task-form">
+                <input type="text" id="task-input" placeholder="What are you studying right now? (e.g. Solve 30 PYQs of Electrostatics)" required>
+                <select id="task-duration-select">
+                    <option value="0.25">15 Minutes</option>
+                    <option value="0.5">30 Minutes</option>
+                    <option value="1" selected>1 Hour</option>
+                    <option value="1.5">1.5 Hours</option>
+                    <option value="2">2 Hours</option>
+                    <option value="2.5">2.5 Hours</option>
+                    <option value="3">3 Hours</option>
+                    <option value="24">24 Hours</option>
+                </select>
+                <button type="submit" class="btn-primary">Add Task</button>
+            </form>
+
+            <div id="task-list" class="task-list"></div>
+        </section>
+
+        <section class="syllabus-section">
+            <h2 class="section-heading">Exhaustive JEE Syllabus Tracker</h2>
+            <div class="syllabus-tabs">
+                <button class="tab-btn active" data-tab="physics">Physics</button>
+                <button class="tab-btn" data-tab="chemistry">Chemistry</button>
+                <button class="tab-btn" data-tab="maths">Mathematics</button>
+            </div>
+
+            <div id="physics-tab-content" class="tab-pane active">
+                <div id="physics-syllabus-container" class="subject-syllabus-grid"></div>
+            </div>
+            <div id="chemistry-tab-content" class="tab-pane">
+                <div id="chemistry-syllabus-container" class="subject-syllabus-grid"></div>
+            </div>
+            <div id="maths-tab-content" class="tab-pane">
+                <div id="maths-syllabus-container" class="subject-syllabus-grid"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="fullscreen-timer-modal" class="fullscreen-modal">
+        <div class="fullscreen-content">
+            <span class="fs-badge">DEEP WORK FOCUS MODE</span>
+            <h2 id="fullscreen-task-headline">Current Task</h2>
+            <div id="fullscreen-task-countdown" class="fs-countdown">00:00:00</div>
+            <div class="fs-actions">
+                <button id="btn-pause-fullscreen" class="btn-secondary">Pause</button>
+                <button id="btn-exit-fullscreen" class="btn-danger">Exit Focus Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body><script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJJgbJEFqJi_Sb4fKazqrrT0weuj_prt4",
+    authDomain: "jeebykavy.firebaseapp.com",
+    projectId: "jeebykavy",
+    storageBucket: "jeebykavy.firebasestorage.app",
+    messagingSenderId: "682275791226",
+    appId: "1:682275791226:web:1586873e90cddb075636c3",
+    measurementId: "G-D1Z066FZNB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+</html>
